@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreedyDiceGameSharp", "Gree
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreedyDiceGameSharp.Test", "GreedyDiceGameSharp.Test\GreedyDiceGameSharp.Test.csproj", "{61605F12-F755-4716-A298-9124E5BEB4DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreedyDiceGameSharp.CommandLine", "GreedyDiceGameSharp.Console\GreedyDiceGameSharp.CommandLine.csproj", "{33FFEA1D-6BAB-45A4-BDC4-52A0F488DA9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreedyDiceGameSharp.CommandLine", "GreedyDiceGameSharp.Console\GreedyDiceGameSharp.CommandLine.csproj", "{33FFEA1D-6BAB-45A4-BDC4-52A0F488DA9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreedyDiceGameSharp.Web", "GreedyDiceGameSharp.Web\GreedyDiceGameSharp.Web.csproj", "{4355C002-0167-4F7A-96F5-CEBAB3088641}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreedyDiceGameSharp.Web", "GreedyDiceGameSharp.Web\GreedyDiceGameSharp.Web.csproj", "{4355C002-0167-4F7A-96F5-CEBAB3088641}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

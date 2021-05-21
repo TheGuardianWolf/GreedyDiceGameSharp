@@ -1,4 +1,5 @@
 using GreedyDiceGameSharp.Web.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -29,13 +30,15 @@ namespace GreedyDiceGameSharp.Web
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddAuthentication().AddCookie(options =>
-            {
-                options.SlidingExpiration = true;
-            });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.SlidingExpiration = true;
+                });
             services.AddAuthorization();
 
-            services.AddSingleton<WeatherForecastService>();
+            services.AddHttpContextAccessor();
+
             services.AddSingleton<IMatchmakingService, MatchmakingService>();
             services.AddSingleton<IGameService, GameService>();
         }
@@ -58,6 +61,9 @@ namespace GreedyDiceGameSharp.Web
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,0 +1,79 @@
+﻿<div class="dice-face w-20 h-20">
+    <!-- CC BY-SA 4.0 Mliu92 -->
+    <ConditionalGroup When="@(Number == 1)">
+        <svg version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <g transform="translate(0 -922.52)" stroke="currentColor" stroke-linecap="square">
+                <rect x="10" y="932.52" width="180" height="180" rx="24" ry="24" fill="#fff" stroke-width="9.6" fill-opacity="0" />
+                <circle cx="100" cy="1022.5" r="20" />
+            </g>
+        </svg>
+    </ConditionalGroup>
+    <ConditionalGroup When="@(Number == 2)">
+        <svg version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <g transform="translate(0 -922.52)" stroke="currentColor" stroke-linecap="square">
+                <rect x="10" y="932.52" width="180" height="180" rx="24" ry="24" fill="#fff" stroke-width="9.6" fill-opacity="0" />
+                <circle cx="150" cy="972.52" r="20" />
+                <circle cx="50" cy="1072.5" r="20" />
+            </g>
+        </svg>
+    </ConditionalGroup>
+    <ConditionalGroup When="@(Number == 3)">
+        <svg version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <g transform="translate(0 -922.52)" stroke="currentColor" stroke-linecap="square">
+                <rect x="10" y="932.52" width="180" height="180" rx="24" ry="24" fill="#fff" stroke-width="9.6" fill-opacity="0" />
+                <g>
+                    <circle cx="100" cy="1022.5" r="20" />
+                    <circle cx="150" cy="972.52" r="20" />
+                    <circle cx="50" cy="1072.5" r="20" />
+                </g>
+            </g>
+        </svg>
+    </ConditionalGroup>
+    <ConditionalGroup When="@(Number == 4)">
+        <svg version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <g transform="translate(0 -922.52)" stroke="currentColor" stroke-linecap="square">
+                <rect x="10" y="932.52" width="180" height="180" rx="24" ry="24" fill="#fff" stroke-width="9.6" fill-opacity="0" />
+                <g>
+                    <circle cx="50" cy="972.52" r="20" />
+                    <circle cx="150" cy="972.52" r="20" />
+                    <circle cx="50" cy="1072.5" r="20" />
+                    <circle cx="150" cy="1072.5" r="20" />
+                </g>
+            </g>
+        </svg>
+    </ConditionalGroup>
+    <ConditionalGroup When="@(Number == 5)">
+        <svg version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <g transform="translate(0 -922.52)" stroke="currentColor" stroke-linecap="square">
+                <rect x="10" y="932.52" width="180" height="180" rx="24" ry="24" fill="#fff" stroke-width="9.6" fill-opacity="0" />
+                <g>
+                    <circle cx="100" cy="1022.5" r="20" />
+                    <circle cx="150" cy="972.52" r="20" />
+                    <circle cx="50" cy="1072.5" r="20" />
+                    <circle cx="50" cy="972.52" r="20" />
+                    <circle cx="150" cy="1072.5" r="20" />
+                </g>
+            </g>
+        </svg>
+    </ConditionalGroup>
+    <ConditionalGroup When="@(Number == 6)">
+        <svg version="1.1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <g transform="translate(0 -922.52)" stroke="currentColor" stroke-linecap="square">
+                <rect x="10" y="932.52" width="180" height="180" rx="24" ry="24" fill="#fff" stroke-width="9.6" fill-opacity="0" />
+                <g>
+                    <circle cx="50" cy="972.52" r="20" />
+                    <circle cx="150" cy="972.52" r="20" />
+                    <circle cx="50" cy="1022.5" r="20" />
+                    <circle cx="150" cy="1022.5" r="20" />
+                    <circle cx="50" cy="1072.5" r="20" />
+                    <circle cx="150" cy="1072.5" r="20" />
+                </g>
+            </g>
+        </svg>
+    </ConditionalGroup>
+</div>
+
+@code {
+    [Parameter]
+    public int Number { get; set; }
+}

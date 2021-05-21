@@ -1,0 +1,21 @@
+﻿<div class="dice-container flex flex-col items-center">
+    <div class="dice-wrapper flex flex-row">
+        @foreach (var diceValue in DiceValues)
+        {
+            <DieFace Number="@diceValue.Face" />
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IList<DiceValue> DiceValues { get; set; } = new List<DiceValue>
+    {
+        new DiceValue(1, false, false),
+        new DiceValue(1, false, false),
+        new DiceValue(1, false, false),
+        new DiceValue(1, false, false),
+        new DiceValue(1, false, false),
+        new DiceValue(1, false, false)
+    };
+}

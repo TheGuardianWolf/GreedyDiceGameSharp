@@ -16,4 +16,8 @@
     <ProjectReference Include="..\GreedyDiceGameSharp\GreedyDiceGameSharp.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>

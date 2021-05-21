@@ -1,7 +1,12 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<CenteredContainer>
+    <DiceContainer />
+</CenteredContainer>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    [Inject]
+    private IMatchmakingService MatchmakingService { get; set; }
+    [Inject]
+    private IGameService GameService { get; set; }
+}
