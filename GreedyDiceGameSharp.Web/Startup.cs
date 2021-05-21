@@ -39,6 +39,7 @@ namespace GreedyDiceGameSharp.Web
 
             services.AddHttpContextAccessor();
 
+            services.AddScoped<IAuthService, AuthService>();
             services.AddSingleton<IMatchmakingService, MatchmakingService>();
             services.AddSingleton<IGameService, GameService>();
         }

@@ -15,7 +15,7 @@ namespace GreedyDiceGameSharp.Web.Shared
     public class AnonIdentityIssuer: ComponentBase
     {
         [Inject]
-        private IHttpContextAccessor HttpContextAccessor { get; set; }
+        private IAuthService AuthService { get; set; }
 
         [Inject]
         private NavigationManager NavigationManager { get; set; }
@@ -31,18 +31,7 @@ namespace GreedyDiceGameSharp.Web.Shared
 
                 if (authenticationState?.User?.Identity is null || !authenticationState.User.Identity.IsAuthenticated)
                 {
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, $"{Guid.NewGuid()}"),
-                        new Claim(ClaimTypes.Role, $"{UserRoles.Anonymous}")
-                    };
-
-                    var claimsIdentity = new ClaimsIdentity(
-                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    await HttpContextAccessor.HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity));
+                    await AuthService.IssueAnonIdentity();
                 }
                 else
                 {
