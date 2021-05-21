@@ -26,10 +26,10 @@ namespace GreedyDiceGameSharp.Web.Data
         public async Task IssueAnonIdentity()
         {
             var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, $"{Guid.NewGuid()}"),
-                        new Claim(ClaimTypes.Role, $"{UserRoles.Anonymous}")
-                    };
+            {
+                new Claim(ClaimTypes.NameIdentifier, $"{Guid.NewGuid()}"),
+                new Claim(ClaimTypes.Role, $"{UserRoles.Anonymous}")
+            };
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
