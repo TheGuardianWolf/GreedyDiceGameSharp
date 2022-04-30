@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace GreedyDiceGameSharp
 {
-    public class Counter
+    public class Counter<T>
     {
-        IDictionary<dynamic, int> Store { get; set; } = new Dictionary<dynamic, int>();
+        IDictionary<T, int> Store { get; set; } = new Dictionary<T, int>();
 
-        public Counter(IEnumerable<dynamic> o)
+        public Counter(IEnumerable<T> o)
         {
             foreach (var obj in o)
             {
@@ -18,7 +18,7 @@ namespace GreedyDiceGameSharp
             }
         }
 
-        public int GetCount(dynamic o)
+        public int GetCount(T o)
         {
             var hasKey = Store.TryGetValue(o, out int val);
             if (!hasKey)
@@ -28,7 +28,7 @@ namespace GreedyDiceGameSharp
             return val;
         }
 
-        public void SetCount(dynamic o, int count)
+        public void SetCount(T o, int count)
         {
             if (Store.ContainsKey(o))
             {
@@ -36,12 +36,12 @@ namespace GreedyDiceGameSharp
             }
         }
 
-        public IDictionary<dynamic, int> GetCounts()
+        public IDictionary<T, int> GetCounts()
         {
-            return new Dictionary<dynamic, int>(Store);
+            return new Dictionary<T, int>(Store);
         }
 
-        public int Increment(dynamic o)
+        public int Increment(T o)
         {
             if (Store.ContainsKey(o))
             {
@@ -55,7 +55,7 @@ namespace GreedyDiceGameSharp
             return Store[o];
         }
 
-        public int Decrement(dynamic o)
+        public int Decrement(T o)
         {
             if (Store.ContainsKey(o))
             {

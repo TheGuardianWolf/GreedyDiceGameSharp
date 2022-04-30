@@ -4,13 +4,6 @@ using System.Linq;
 
 namespace GreedyDiceGameSharp
 {
-    public enum GameState
-    {
-        Init,
-        WaitInput,
-        Process
-    }
-
     public enum GameAction
     {
         Stop,
@@ -58,19 +51,20 @@ namespace GreedyDiceGameSharp
     public class GameManager
     {
         public Queue<IPlayerInput> PlayerInputQueue { get; } = new Queue<IPlayerInput>();
-        public event EventHandler<IGameError> GameError;
+        //public event EventHandler<IPlayerInput> PlayerInput;
+        public event EventHandler<IGameEvent> GameEvent;
         protected Game Game { get; set; }
 
         public GameManager()
         {
             Game = new Game();
 
-            Game.GameError += Game_GameError;
+            Game.GameEvent += Game_GameEvent;
         }
 
-        private void Game_GameError(object sender, IGameError e)
+        private void Game_GameEvent(object sender, IGameEvent e)
         {
-            GameError?.Invoke(this, e);
+            GameEvent?.Invoke(this, e);
         }
 
         public void Configure(GameConfiguration configuration)
@@ -106,6 +100,7 @@ namespace GreedyDiceGameSharp
         public void AddInput(IPlayerInput playerInput)
         {
             PlayerInputQueue.Enqueue(playerInput);
+            //PlayerInput?.Invoke(this, playerInput);
         }
 
         public Player GetCurrentPlayer() => Game?.GetCurrentPlayer();

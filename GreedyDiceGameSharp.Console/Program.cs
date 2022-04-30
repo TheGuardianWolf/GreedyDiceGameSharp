@@ -31,7 +31,7 @@ namespace GreedyDiceGameSharp.CommandLine
 
             game.AddPlayers(p1Name, p2Name);
 
-            game.GameError += Game_GameError;
+            game.GameEvent += Game_GameEvent;
 
             var loopCount = 0;
             while(true)
@@ -67,9 +67,9 @@ namespace GreedyDiceGameSharp.CommandLine
             }
         }
 
-        private static void Game_GameError(object sender, IGameError e)
+        private static void Game_GameEvent(object sender, IGameEvent e)
         {
-            Console.WriteLine($"Error from {e.LastGameAction} encountered: {e}");
+            Console.WriteLine($"Event encountered: {e.EventType} with last action {e.LastAction} from player {e.PlayerName}");
         }
 
         static string DisplayDice(IEnumerable<DiceValue> diceValue)

@@ -35,6 +35,24 @@ namespace GreedyDiceGameSharp.Web.Data
             return true;
         }
 
+        public bool Contains(Guid id)
+        {
+            var entered = Monitor.TryEnter(_monitorTarget, 100);
+            if (!entered)
+            {
+                return false;
+            }
+
+            try
+            {
+                return WaitingQueue.Contains(id);
+            }
+            finally
+            {
+                Monitor.Exit(_monitorTarget);
+            }
+        }
+
         public bool RemoveFromQueue(Guid id)
         {
             var entered = Monitor.TryEnter(_monitorTarget, 100);

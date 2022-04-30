@@ -31,7 +31,7 @@ namespace GreedyDiceGameSharp
 
         public int Score(IList<int> values)
         {
-            var counter = new Counter(values.Select(x => (dynamic)x));
+            var counter = new Counter<int>(values.Select(x => x));
 
             int score = 0;
 
@@ -43,7 +43,7 @@ namespace GreedyDiceGameSharp
             return score;
         }
 
-        protected int StraightRule(Counter counter)
+        protected int StraightRule(Counter<int> counter)
         {
             for (var i = 1; i <= 6; i++)
             {
@@ -61,7 +61,7 @@ namespace GreedyDiceGameSharp
             return 1800;
         }
 
-        protected int PartialStraightRule(Counter counter)
+        protected int PartialStraightRule(Counter<int> counter)
         {
             for (var k = 0; k < 2; k++)
             {
@@ -90,7 +90,7 @@ namespace GreedyDiceGameSharp
             return 0;
         }
 
-        protected int ThreePairsRule(Counter counter)
+        protected int ThreePairsRule(Counter<int> counter)
         {
             List<int> pairs = new List<int>();
             var counts = counter.GetCounts();
@@ -116,7 +116,7 @@ namespace GreedyDiceGameSharp
             return 0;
         }
 
-        protected int ThreeOrMoreOfAKindRule(Counter counter)
+        protected int ThreeOrMoreOfAKindRule(Counter<int> counter)
         {
             int score = 0;
             foreach (var kvp in counter.GetCounts())
@@ -142,7 +142,7 @@ namespace GreedyDiceGameSharp
             return score;
         }
 
-        protected int OnesRule(Counter counter)
+        protected int OnesRule(Counter<int> counter)
         {
             var oneCount = counter.GetCount(1);
 
@@ -151,7 +151,7 @@ namespace GreedyDiceGameSharp
             return oneCount * 100;
         }
 
-        protected int FivesRule(Counter counter)
+        protected int FivesRule(Counter<int> counter)
         {
             var fiveCount = counter.GetCount(5);
 
@@ -176,15 +176,15 @@ namespace GreedyDiceGameSharp
     public class Rule
     {
         public string Name { get; }
-        protected Func<Counter, int> Scorer { get; }
+        protected Func<Counter<int>, int> Scorer { get; }
 
-        public Rule(string name, Func<Counter, int> scorer)
+        public Rule(string name, Func<Counter<int>, int> scorer)
         {
             Name = name;
             Scorer = scorer;
         }
 
-        public int Score(Counter counter)
+        public int Score(Counter<int> counter)
         {
             return Scorer(counter);
         }

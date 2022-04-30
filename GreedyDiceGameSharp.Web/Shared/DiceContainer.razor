@@ -2,7 +2,7 @@
     <div class="dice-wrapper flex flex-row">
         @foreach (var diceValue in DiceValues)
         {
-            <DieFace Number="@diceValue.Face" />
+            <DieFace Number="@diceValue.Face" Selected="@diceValue.Selected" Locked="@diceValue.Locked" OnClick="() => OnDiceClick.InvokeAsync(DiceValues.IndexOf(diceValue))" />
         }
     </div>
 </div>
@@ -18,4 +18,7 @@
         new DiceValue(1, false, false),
         new DiceValue(1, false, false)
     };
+
+    [Parameter]
+    public EventCallback<int> OnDiceClick { get; set; }
 }

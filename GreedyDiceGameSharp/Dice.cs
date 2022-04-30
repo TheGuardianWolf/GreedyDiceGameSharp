@@ -2,7 +2,7 @@
 {
     public class DiceValue
     {
-        public int Face { get; }
+        public int Face { get; } = 1;
         public bool Locked { get; }
         public bool Selected { get; }
 
@@ -18,7 +18,7 @@
     {
         public bool Selected { get; private set; }
         public bool Locked { get; private set; }
-        public int Face { get; private set; }
+        public int Face { get; private set; } = 1;
 
         public void Roll()
         {

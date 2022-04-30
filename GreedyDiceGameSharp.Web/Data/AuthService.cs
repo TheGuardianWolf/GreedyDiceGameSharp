@@ -11,12 +11,15 @@ namespace GreedyDiceGameSharp.Web.Data
 {
     public interface IAuthService
     {
+        Guid UserId { get; }
         Task IssueAnonIdentity();
     }
 
     public class AuthService : IAuthService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public Guid UserId => Guid.Parse(_httpContextAccessor.HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
 
         public AuthService(IHttpContextAccessor httpContextAccessor)
         {

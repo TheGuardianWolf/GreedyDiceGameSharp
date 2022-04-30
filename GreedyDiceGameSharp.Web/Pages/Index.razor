@@ -1,12 +1,37 @@
 ﻿@page "/"
 
 <CenteredContainer>
-    <DiceContainer />
+    @if (Game is not null)
+    {
+        <DiceContainer DiceValues="@(DiceValues())" OnDiceClick="@Dice_OnClick"/>
+        <div>
+            <span>You are : @(GetPlayerName() ?? "None")</span>
+        </div>
+        <div>
+            <span>Current player: @(Game.Game.GetCurrentPlayer().Name ?? "None")</span>
+        </div>
+        <div>
+            <button @onclick="@(Button_OnRoll)" disabled="@(!IsPlayerTurn())">
+                ROLL
+            </button>
+            <button @onclick="@(Button_OnStop)" disabled="@(!IsPlayerTurn())">
+                STOP
+            </button>
+        </div>
+        <div class="mt-2">
+            <span>@GameScore (@PlayerScore)</span>
+        </div>
+        <div class="mt-2">
+            <span>@GameMessage</span>
+        </div>
+        <div class="mt-2 font-mono whitespace-pre-wrap">
+            <span>@GameLog</span>
+        </div>
+    }
+    else
+    {
+        <div>
+            <span>Waiting for players...</span>
+        </div>
+    }
 </CenteredContainer>
-
-@code {
-    [Inject]
-    private IMatchmakingService MatchmakingService { get; set; }
-    [Inject]
-    private IGameService GameService { get; set; }
-}

@@ -17,8 +17,8 @@ namespace GreedyDiceGameSharp
 
     public class Game
     {
+        public event EventHandler<IGameEvent> GameEvent;
         public GameConfiguration Configuration { get; private set; }
-        public event EventHandler<IGameError> GameError;
         protected IDictionary<string, Player> Players { get; set; } = new Dictionary<string, Player>();
         protected Board Board { get; set; }
         protected int CurrentPlayer { get; set; }
@@ -42,21 +42,25 @@ namespace GreedyDiceGameSharp
             Players.Add(player1, new Player(player1));
             Players.Add(player2, new Player(player2));
             CurrentPlayer = 1;
-        }
 
+            GameEvent?.Invoke(this, new GameEvent(player1, GameEventType.PlayersAdded, null));
+            GameEvent?.Invoke(this, new GameEvent(player2, GameEventType.PlayersAdded, null));
+        }
         private bool HasScoringDiceGuard(GameAction action)
         {
+            var playerName = GetCurrentPlayer().Name;
+
             if (!Board.GetDice().Any(x => x.Selected))
             {
                 // No selected dice
-                GameError?.Invoke(this, new NoDiceSelected(action));
+                GameEvent?.Invoke(this, new GameEvent(playerName, GameEventType.NoDiceSelected, action));
                 return false;
             }
 
             if (!Board.HasScoringDiceSelected())
             {
                 // No selected dice with scores
-                GameError?.Invoke(this, new NoScoringDiceSelected(action));
+                GameEvent?.Invoke(this, new GameEvent(playerName, GameEventType.NoScoringDiceSelected, action));
                 return false;
             }
 
@@ -65,10 +69,12 @@ namespace GreedyDiceGameSharp
 
         public bool PerformStop()
         {
+            var player = GetCurrentPlayer();
+
             if (ConsecutiveRolls == 0)
             {
                 // Haven't rolled
-                GameError?.Invoke(this, new DiceNotRolled(GameAction.Stop));
+                GameEvent?.Invoke(this, new GameEvent(player.Name, GameEventType.DiceNotRolled, GameAction.Stop));
                 return false;
             }
 
@@ -78,16 +84,18 @@ namespace GreedyDiceGameSharp
             }
 
             Board.UpdateScoreFromSelected();
-            var player = GetCurrentPlayer();
             player.IncreaseScore(Board.GetScore());
+            GameEvent?.Invoke(this, new GameEvent(player.Name, GameEventType.DiceStopped, GameAction.Stop));
 
-            NextPlayer();
+            NextPlayer(GameAction.Stop);
 
             return true;
         }
 
         public bool PerformRoll()
         {
+            var player = GetCurrentPlayer();
+
             if (ConsecutiveRolls > 0)
             {
                 if (!HasScoringDiceGuard(GameAction.Roll))
@@ -99,13 +107,14 @@ namespace GreedyDiceGameSharp
             }
 
             Board.RollDice();
+            GameEvent?.Invoke(this, new GameEvent(player.Name, GameEventType.DiceRolled, GameAction.Roll));
 
-            if (!Board.HasScoringDiceSelected())
+            if (ConsecutiveRolls > 0 && !Board.HasScoringDice())
             {
-                GameError?.Invoke(this, new NoScoringDiceSelected(GameAction.Roll));
+                GameEvent?.Invoke(this, new GameEvent(player.Name, GameEventType.NoScoringDiceSelected, GameAction.Roll));
 
                 // Rolled no scoring dice
-                NextPlayer();
+                NextPlayer(GameAction.Roll);
 
                 return false;
             }
@@ -117,9 +126,11 @@ namespace GreedyDiceGameSharp
 
         public void PerformSelect(IEnumerable<int> selection)
         {
+            var player = GetCurrentPlayer();
+
             if (ConsecutiveRolls == 0)
             {
-                GameError?.Invoke(this, new DiceNotRolled(GameAction.Select));
+                GameEvent?.Invoke(this, new GameEvent(player.Name, GameEventType.DiceNotRolled, GameAction.Select));
                 return;
             }
 
@@ -129,10 +140,12 @@ namespace GreedyDiceGameSharp
                 if (dice[select].Selected)
                 {
                     Board.DeselectDice(select);
+                    GameEvent?.Invoke(this, new GameEvent(player.Name, GameEventType.DiceSelectChanged, GameAction.Select));
                 }
                 else
                 {
                     Board.SelectDice(select);
+                    GameEvent?.Invoke(this, new GameEvent(player.Name, GameEventType.DiceSelectChanged, GameAction.Select));
                 }
             }
         }
@@ -152,58 +165,52 @@ namespace GreedyDiceGameSharp
             return Board.GetScore();
         }
 
-        private void NextPlayer()
+        private void NextPlayer(GameAction action)
         {
+            var player = GetCurrentPlayer();
             ConsecutiveRolls = 0;
-            GetCurrentPlayer().IncreaseScore(GetBoardScore());
+            player.IncreaseScore(GetBoardScore());
             Board.Reset();
             CurrentPlayer = Math.Max(1, (CurrentPlayer + 1) % 3);
+
+            var newPlayer = GetCurrentPlayer();
+            GameEvent?.Invoke(this, new GameEvent(newPlayer.Name, GameEventType.NextPlayer, action));
         }
     }
 
-    public interface IGameError
+    public enum GameEventType
     {
-        GameAction LastGameAction { get; }
+        // Errors
+        DiceNotRolled,
+        NoScoringDiceSelected,
+        NoDiceSelected,
+
+        // Notices
+        NextPlayer,
+        PlayersAdded,
+        DiceRolled,
+        DiceSelectChanged,
+        DiceStopped
     }
 
-    public abstract class BaseGameError
+    public interface IGameEvent
     {
-        public GameAction LastGameAction { get; }
+        public string PlayerName { get; }
+        public GameEventType EventType { get; }
+        public GameAction? LastAction { get; }
+    }
 
-        public BaseGameError(GameAction gameAction)
+    public class GameEvent : IGameEvent
+    {
+        public string PlayerName { get; }
+        public GameEventType EventType { get; }
+        public GameAction? LastAction { get; }
+
+        public GameEvent(string player, GameEventType eventType, GameAction? action)
         {
-            LastGameAction = gameAction;
+            PlayerName = player;
+            EventType = eventType;
+            LastAction = action;
         }
     }
-
-    public class NoDiceSelected : IGameError
-    {
-        public GameAction LastGameAction { get; }
-
-        public NoDiceSelected(GameAction gameAction)
-        {
-            LastGameAction = gameAction;
-        }
-    }
-
-    public class NoScoringDiceSelected : IGameError 
-    {
-        public GameAction LastGameAction { get; }
-
-        public NoScoringDiceSelected(GameAction gameAction)
-        {
-            LastGameAction = gameAction;
-        }
-    }
-
-    public class DiceNotRolled : IGameError
-    {
-        public GameAction LastGameAction { get; }
-
-        public DiceNotRolled(GameAction gameAction)
-        {
-            LastGameAction = gameAction;
-        }
-    }
-
 }

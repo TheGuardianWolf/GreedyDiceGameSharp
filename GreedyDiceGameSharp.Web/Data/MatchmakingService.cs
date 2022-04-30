@@ -11,6 +11,7 @@ namespace GreedyDiceGameSharp.Web.Data
     public interface IMatchmakingService
     {
         bool AddToQueue(Guid playerId);
+        bool Contains(Guid playerId);
         bool RemoveFromQueue(Guid playerId);
     }
 
@@ -51,6 +52,8 @@ namespace GreedyDiceGameSharp.Web.Data
 
             return success;
         }
+
+        public bool Contains(Guid playerId) => PlayerWaitingQueue.Contains(playerId);
 
         public bool RemoveFromQueue(Guid playerId) => PlayerWaitingQueue.RemoveFromQueue(playerId);
     }

@@ -12,7 +12,14 @@ namespace GreedyDiceGameSharp.Web.Data
         IDictionary<Guid, GameWrapper> GameStore { get; set; }
         IDictionary<Guid, PlayerWrapper> PlayerStore { get; set; }
 
+        event EventHandler<GameCreatedEvent> GameCreated;
+        event EventHandler<GameEndedEvent> GameEnded;
+
+        GameWrapper GetGame(Guid gameId);
+        PlayerWrapper GetPlayer(Guid playerId);
+
         Guid CreateNewGame(Guid player1Id, Guid player2Id);
+        bool CheckPlayerInGame(Guid playerId, out GameWrapper Game);
         void EndGame(Guid gameId);
     }
 
@@ -44,7 +51,7 @@ namespace GreedyDiceGameSharp.Web.Data
             } while (GameStore.ContainsKey(gameId));
 
             var personGenerator = new PersonNameGenerator();
-            var names = personGenerator.GenerateMultipleFirstAndLastNames(2).Select(x => x.Split(' ').First());
+            var names = personGenerator.GenerateMultipleFirstAndLastNames(2);
 
             var player1 = new PlayerWrapper
             {
@@ -70,9 +77,21 @@ namespace GreedyDiceGameSharp.Web.Data
             PlayerStore.Add(player1.Id, player1);
             PlayerStore.Add(player2.Id, player2);
 
+            game.Game.AddPlayers(player1.Player.Name, player2.Player.Name);
+
             GameCreated?.Invoke(this, new GameCreatedEvent(gameId, player1, player2));
 
             return gameId;
+        }
+
+        public GameWrapper GetGame(Guid gameId)
+        {
+            return GameStore[gameId];
+        }
+
+        public PlayerWrapper GetPlayer(Guid playerId)
+        {
+            return PlayerStore[playerId];
         }
 
         public void EndGame(Guid gameId)
